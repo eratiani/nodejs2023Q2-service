@@ -1,4 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class FavoritesService {}
+export class FavoritesService {
+    constructor() {}
+
+    async create(id: string) {
+   
+    }
+  
+    async findAll() {
+  
+    }
+  
+    async remove(id: string) {
+     
+    }
+}
