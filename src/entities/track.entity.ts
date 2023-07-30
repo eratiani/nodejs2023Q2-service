@@ -33,4 +33,7 @@ export class Track {
     example: 262,
   })
   duration: number;
+  constructor(partial: Partial<Track>) {
+    Object.assign(this, partial);
+  }
 }

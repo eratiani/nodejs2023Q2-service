@@ -25,4 +25,7 @@ export class Album {
     format: 'uuid',
   })
   artistId: string | null;
+  constructor(partial: Partial<Album>) {
+    Object.assign(this, partial);
+  }
 }

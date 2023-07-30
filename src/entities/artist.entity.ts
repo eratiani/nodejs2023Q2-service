@@ -18,4 +18,7 @@ export class Artist {
     example: false,
   })
   grammy: boolean;
+  constructor(partial: Partial<Artist>) {
+    Object.assign(this, partial);
+  }
 }

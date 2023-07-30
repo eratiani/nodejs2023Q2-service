@@ -32,7 +32,10 @@ export class User {
   updatedAt: number;
   @ApiProperty({
     type: String,
-    example: "SMth1234",
+    example: 'SMth1234',
   })
   password: string;
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
 }

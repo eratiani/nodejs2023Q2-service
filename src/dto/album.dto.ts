@@ -12,16 +12,16 @@ export class CreateAlbumDto {
   @ApiProperty({
     type: String,
     description: 'This is a required property',
-    example:"sting"
+    example: 'sting',
   })
   @IsString()
   @IsNotEmpty()
   name: string;
 
   @ApiProperty({
-    type: "integer",
+    type: 'integer',
     description: 'This is a required property',
-    example:1992
+    example: 1992,
   })
   @IsNumber()
   @IsNotEmpty()

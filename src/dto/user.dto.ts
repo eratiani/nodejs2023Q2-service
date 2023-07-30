@@ -5,7 +5,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateUserDto {
   @ApiProperty({
     type: String,
-    description: "login",
+    description: 'login',
   })
   @IsString()
   @IsNotEmpty()
@@ -13,10 +13,20 @@ export class CreateUserDto {
 
   @ApiProperty({
     type: String,
-    description: "password",
+    description: 'password',
   })
   @IsString()
   @IsNotEmpty()
   password: string;
 }
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class UpdateUserDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  oldPassword: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  newPassword: string;
+}
