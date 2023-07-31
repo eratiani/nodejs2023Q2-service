@@ -7,22 +7,22 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
-  .setTitle('Home Library Service')
-  .setDescription('Home music library service OpenAPI 3.0')
-  .setVersion('1.0')
-  .addTag('album')
-  .addTag('artist')
-  .addTag('favorites')
-  .addTag('track')
-  .addTag('user')
-  .build();
+    .setTitle('Home Library Service')
+    .setDescription('Home music library service OpenAPI 3.0')
+    .setVersion('1.0')
+    .addTag('album')
+    .addTag('artist')
+    .addTag('favorites')
+    .addTag('track')
+    .addTag('user')
+    .build();
 
-const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config);
 
-SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('docs', app, document);
 
-await app.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`);
-});
+  await app.listen(PORT, () => {
+    console.log(`Server started on http://localhost:${PORT}`);
+  });
 }
 bootstrap();

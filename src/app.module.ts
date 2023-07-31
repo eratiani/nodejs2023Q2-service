@@ -10,7 +10,15 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { DbModule } from './db/db.module';
 
 @Module({
-  imports: [AuthModule, UserModule, TrackModule, ArtistModule, AlbumModule, FavoritesModule, DbModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    TrackModule,
+    ArtistModule,
+    AlbumModule,
+    FavoritesModule,
+    DbModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

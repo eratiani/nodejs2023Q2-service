@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { error } from 'console';
 import { DbService } from 'src/db/db.service';
 import { CreateAlbumDto, UpdateAlbumDto } from 'src/dto';
 import { Album } from 'src/entities';

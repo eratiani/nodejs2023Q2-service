@@ -1,4 +1,4 @@
-import { Album, Track } from 'src/entities';
+import { Track } from 'src/entities';
 import { TrackService } from './track.service';
 import {
   Controller,
