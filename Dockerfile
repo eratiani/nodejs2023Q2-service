@@ -1,6 +1,8 @@
-from node:18.17.0
-WORKDIR /app
-COPY package*.json .
+FROM node:18.16-alpine
+
+WORKDIR /usr/app
+
+COPY package*.json ./
 RUN npm ci
 COPY . .
 EXPOSE 4000
