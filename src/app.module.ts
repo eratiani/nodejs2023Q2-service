@@ -8,6 +8,7 @@ import { ArtistModule } from './artist/artist.module';
 import { AlbumModule } from './album/album.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { DbModule } from './db/db.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DbModule } from './db/db.module';
     AlbumModule,
     FavoritesModule,
     DbModule,
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
