@@ -1,23 +1,44 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { AuthService } from 'src/auth/auth.service';
 import { CreateUserDto, UpdateUserDto } from 'src/dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { BcryptService } from 'src/util/crypto.service';
 
 @Injectable()
 export class UserService {
-  constructor(private databaseService: PrismaService) {}
+  constructor(
+    private databaseService: PrismaService,
+    private bcrypt: BcryptService,
+  ) {}
 
   async create(user: CreateUserDto) {
-    const newUser = await this.databaseService.user.create({
-      data: user,
-    });
+    try {
+      const hashedPassword = await this.bcrypt.hashPassword(user.password);
+      const newUser = await this.databaseService.user.create({
+        data: {
+          ...user,
+          password: hashedPassword,
+        },
+      });
 
-    return newUser;
+      return newUser;
+    } catch (err) {
+      if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          `User with login ${user.login} already exists in users`,
+        );
+      } else {
+        throw err;
+      }
+    }
   }
 
   async findAll() {
@@ -35,7 +56,11 @@ export class UserService {
 
     return foundUser;
   }
-
+  async findOneByLogin(login: string) {
+    return await this.databaseService.user.findUnique({
+      where: { login: login },
+    });
+  }
   async update(id: string, { oldPassword, newPassword }: UpdateUserDto) {
     const foundUser = await this.databaseService.user.findUnique({
       where: { id: id },

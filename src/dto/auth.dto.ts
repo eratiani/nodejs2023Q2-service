@@ -1,20 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 import { CreateUserDto } from '.';
+import { TokenPayload } from 'src/auth/token-payload.interface';
 
 export class CreateAuthUserDto extends CreateUserDto {}
 
-export class CreateResponseAuthDto {
-  @ApiProperty({
-    type: String,
-  })
-  message: string;
-}
-export class UpdateAuthUserDto {
-  @ApiProperty({
-    type: String,
-  })
-  @IsString()
+export class RefreshDto {
   @IsNotEmpty()
   refreshToken: string;
+
+  @IsOptional()
+  tokenPayload: TokenPayload;
 }
