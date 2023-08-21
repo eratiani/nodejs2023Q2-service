@@ -61,30 +61,39 @@ export class UserService {
       where: { login: login },
     });
   }
-  async update(id: string, { oldPassword, newPassword }: UpdateUserDto) {
-    const foundUser = await this.databaseService.user.findUnique({
+  async update(updateUserDto: UpdateUserDto, id: string) {
+    const checkUser = await this.databaseService.user.findUnique({
       where: { id: id },
     });
-
-    if (foundUser === null) {
-      throw new NotFoundException('user not found');
+    if (!checkUser) {
+      throw new NotFoundException(`User with id ${id} doesn't exist`);
     }
 
-    if (foundUser.password === oldPassword) {
-      await this.databaseService.user.update({
+    const isMatch = await this.bcrypt.comparePassword(
+      updateUserDto.oldPassword,
+      checkUser.password,
+    );
+    if (!isMatch) {
+      throw new ForbiddenException('OldPassword is wrong');
+    }
+
+    try {
+      const hashedPassword = await this.bcrypt.hashPassword(
+        updateUserDto.newPassword,
+      );
+      const updateUser = await this.databaseService.user.update({
         where: { id: id },
         data: {
+          password: hashedPassword,
           version: { increment: 1 },
-          password: newPassword,
         },
       });
-
-      return await this.databaseService.user.findUnique({
-        where: { id: id },
-      });
+      if (updateUser) {
+        return updateUser;
+      }
+    } catch (err) {
+      return err;
     }
-
-    throw new ForbiddenException(`User oldPassword is wrong`);
   }
 
   async remove(id: string) {
@@ -92,13 +101,18 @@ export class UserService {
       await this.databaseService.user.delete({
         where: { id: id },
       });
+      return true;
     } catch (error) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
-      ) {
-        throw new NotFoundException(`User was not found`);
-      } else throw error;
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException(`User with id ${id} doesn't exist`);
+        } else {
+          throw error;
+        }
+      } else {
+        console.error;
+      }
+      return false;
     }
   }
 }
