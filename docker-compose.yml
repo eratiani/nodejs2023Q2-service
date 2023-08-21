@@ -2,11 +2,6 @@ version: '3'
 networks:
   default:
     driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.1.0/24
-          gateway: 192.168.1.1
 
 services:
   node:
@@ -35,7 +30,7 @@ services:
       - default
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
