@@ -1,0 +1,45 @@
+version: '3'
+networks:
+  default:
+    driver: bridge
+
+services:
+  node:
+    container_name: node
+    restart: always
+    build: .
+    volumes:
+      - ./src:/usr/app/src
+      - /usr/app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      PORT: ${PORT}
+    networks:
+      - default
+
+  database:
+    container_name: postgres
+    restart: always
+    image: postgres:15.3-alpine
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - default
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
